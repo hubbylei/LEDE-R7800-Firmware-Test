@@ -43,6 +43,7 @@ jobs:
 
     - name: Lftp
       run: |
+        sudo echo "set ftp:ssl-allow no" >> /etc/lftp.conf
         lftp <<EOF
         open ftp://${{secrets.LFTP_USER}}:${{secrets.LFTP_PASS}}@${{secrets.LFTP_HOST}}
         ls
