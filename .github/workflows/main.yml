@@ -46,11 +46,11 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        # sudo -E apt-get -qq update
-        # sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/depends-ubuntu-2004)
-        # sudo -E apt-get -qq autoremove --purge
-        # sudo -E apt-get -qq clean
-        # sudo timedatectl set-timezone "$TZ"
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install $(cat $GITHUB_WORKSPACE/depends-ubuntu-2004)
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir        
 
@@ -68,11 +68,11 @@ jobs:
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
 
-    # - name: Update feeds
-      # run: cd openwrt && ./scripts/feeds update -a
+    - name: Update feeds
+      run: cd openwrt && ./scripts/feeds update -a
 
-    # - name: Install feeds
-      # run: cd openwrt && ./scripts/feeds install -a
+    - name: Install feeds
+      run: cd openwrt && ./scripts/feeds install -a
 
     - name: Load custom configuration
       run: |
@@ -105,20 +105,20 @@ jobs:
         cd openwrt
         # echo -e "4 thread compile"
         # make -j4 || make -j1 || make -j1 V=s
-        mkdir -p ./bin/packages/arm_cortex-a15_neon-vfpv4/base
-        mkdir -p ./bin/packages/arm_cortex-a15_neon-vfpv4/luci
-        mkdir -p ./bin/packages/arm_cortex-a15_neon-vfpv4/packages
-        dd if=/dev/zero bs=1M count=1 of=./bin/packages/arm_cortex-a15_neon-vfpv4/base/Packages.gz
-        dd if=/dev/zero bs=1M count=1 of=./bin/packages/arm_cortex-a15_neon-vfpv4/luci/Packages.gz
-        dd if=/dev/zero bs=1M count=1 of=./bin/packages/arm_cortex-a15_neon-vfpv4/packages/Packages.gz
-        mkdir -p ./bin/targets/ipq806x/generic/packages
-        dd if=/dev/zero bs=1M count=1 of=./bin/targets/ipq806x/generic/packages/Packages.gz
-        dd if=/dev/zero bs=1M count=1 of=./bin/targets/ipq806x/generic/lede-r4489-ce2fb409e-ipq806x-generic-netgear_r7800-squashfs-factory.img
-        dd if=/dev/zero bs=1M count=1 of=./bin/targets/ipq806x/generic/lede-r4489-ce2fb409e-ipq806x-generic-netgear_r7800-squashfs-sysupgrade.bin
-        dd if=/dev/zero bs=1M count=1 of=./bin/targets/ipq806x/generic/sha256sums
-        dd if=/dev/zero bs=1M count=1 of=./bin/targets/ipq806x/generic/config.buildinfo
-        dd if=/dev/zero bs=1M count=1 of=./bin/targets/ipq806x/generic/feeds.buildinfo
-        dd if=/dev/zero bs=1M count=1 of=./bin/targets/ipq806x/generic/version.buildinfo
+        mkdir -p bin/packages/arm_cortex-a15_neon-vfpv4/base
+        mkdir -p bin/packages/arm_cortex-a15_neon-vfpv4/luci
+        mkdir -p bin/packages/arm_cortex-a15_neon-vfpv4/packages
+        dd if=/dev/zero bs=1M count=1 of=bin/packages/arm_cortex-a15_neon-vfpv4/base/Packages.gz
+        dd if=/dev/zero bs=1M count=1 of=bin/packages/arm_cortex-a15_neon-vfpv4/luci/Packages.gz
+        dd if=/dev/zero bs=1M count=1 of=bin/packages/arm_cortex-a15_neon-vfpv4/packages/Packages.gz
+        mkdir -p bin/targets/ipq806x/generic/packages
+        dd if=/dev/zero bs=1M count=1 of=bin/targets/ipq806x/generic/packages/Packages.gz
+        dd if=/dev/zero bs=1M count=1 of=bin/targets/ipq806x/generic/lede-r4489-ce2fb409e-ipq806x-generic-netgear_r7800-squashfs-factory.img
+        dd if=/dev/zero bs=1M count=1 of=bin/targets/ipq806x/generic/lede-r4489-ce2fb409e-ipq806x-generic-netgear_r7800-squashfs-sysupgrade.bin
+        dd if=/dev/zero bs=1M count=1 of=bin/targets/ipq806x/generic/sha256sums
+        dd if=/dev/zero bs=1M count=1 of=bin/targets/ipq806x/generic/config.buildinfo
+        dd if=/dev/zero bs=1M count=1 of=bin/targets/ipq806x/generic/feeds.buildinfo
+        dd if=/dev/zero bs=1M count=1 of=bin/targets/ipq806x/generic/version.buildinfo
         echo "::set-output name=status::success"
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
@@ -180,7 +180,6 @@ jobs:
       run: |
         echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
         touch release.txt
-        mv ./openwrt/OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.zip ./openwrt/bin/
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
@@ -192,7 +191,9 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ steps.tag.outputs.release_tag }}
         body: ${{ steps.tag.outputs.release_tag }}
-        file: ${{ env.FIRMWARE }}/*
+        file: |
+            ${{ env.FIRMWARE }}/*
+            openwrt/OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.zip
         file_glob: true
 
     - name: Delete workflow runs
