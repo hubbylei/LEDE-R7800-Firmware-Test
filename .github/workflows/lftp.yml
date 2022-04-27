@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: TEST LFTP
+name: TEST_LFTP
 
 on:
   repository_dispatch:
@@ -41,7 +41,7 @@ jobs:
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
 
-    -name: Lftp
+    - name: Lftp
       run: |
         lftp <<EOF
         open ftp://${{secrets.LFTP_USER}}:${{secrets.LFTP_PASS}}@${{secrets.LFTP_HOST}}
