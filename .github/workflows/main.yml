@@ -94,9 +94,9 @@ jobs:
       run: |
         cd openwrt
         make defconfig
-        make download -j8
-        find dl -size -1024c -exec ls -l {} \;
-        find dl -size -1024c -exec rm -f {} \;
+        # make download -j8
+        # find dl -size -1024c -exec ls -l {} \;
+        # find dl -size -1024c -exec rm -f {} \;
 
     - name: Compile the firmware
       id: compile
@@ -186,14 +186,14 @@ jobs:
     - name: Upload firmware to release
       uses: softprops/action-gh-release@v1
       if: steps.tag.outputs.status == 'success' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #env:
+      #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body: ${{ steps.tag.outputs.release_tag }}
         files: |
           ${{ env.FIRMWARE }}/*
-          ./openwrt/OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.zip
+          $GITHUB_WORKSPACE/openwrt/OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.zip
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
