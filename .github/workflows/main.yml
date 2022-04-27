@@ -191,7 +191,8 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ steps.tag.outputs.release_tag }}
-        files: ${{ env.FIRMWARE }}/*
+        body: ${{ steps.tag.outputs.release_tag }}
+        file: ${{ env.FIRMWARE }}/*
         file_glob: true
 
     - name: Delete workflow runs
