@@ -191,9 +191,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ steps.tag.outputs.release_tag }}
         body: ${{ steps.tag.outputs.release_tag }}
-        file: |
-            ${{ env.FIRMWARE }}/*
-            openwrt/OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}.zip
+        file: ${{ env.FIRMWARE }}/*
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
