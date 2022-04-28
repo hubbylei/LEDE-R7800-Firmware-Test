@@ -11,7 +11,6 @@
 name: TEST_LFTP
 
 on:
-  repository_dispatch:
   workflow_dispatch:
     inputs:
       ssh:
