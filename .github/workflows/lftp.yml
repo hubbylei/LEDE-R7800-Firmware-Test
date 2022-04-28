@@ -131,16 +131,17 @@ jobs:
 
     - name: Upload firmware
       run: |
+        cd openwrt
+        bdate=$(date "+%Y%m%d%H%M")
         lftp <<EOF
         set ftp:ssl-allow no
         open ftp://${{secrets.LFTP_USER}}:${{secrets.LFTP_PASS}}@${{secrets.LFTP_HOST}}
-        # rm -r -f /Files/lede/packages
-        # rm -r -f /Files/lede/targets
-        # mirror -R bin/packages /Files/lede/
-        # mirror -R bin/targets /Files/lede/
-        # mirror -R bin/packages /Files/lede-rom/$bdate/
-        # mirror -R bin/targets /Files/lede-rom/$bdate/
-        lcd
+        rm -r -f /Files/lede/packages
+        rm -r -f /Files/lede/targets
+        mirror -R bin/packages /Files/lede/
+        mirror -R bin/targets /Files/lede/
+        mirror -R bin/packages /Files/lede-rom/$bdate/
+        mirror -R bin/targets /Files/lede-rom/$bdate/
         close
         bye
         EOF
