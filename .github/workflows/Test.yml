@@ -11,6 +11,9 @@
 name: TEST
 
 on:
+  push:
+    branches: 
+      - main
   workflow_dispatch:
     inputs:
       ssh:
