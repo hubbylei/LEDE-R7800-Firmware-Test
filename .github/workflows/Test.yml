@@ -130,5 +130,4 @@ jobs:
 
     - name: Upload firmware
       run: |
-        ping -c 4 hubbylei.dynu.net
-        curl -L -I --trace log http://hubbylei.dynu.net:81/lede
+        ping -c 4 hubbylei.gicp.net
