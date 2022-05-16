@@ -129,4 +129,4 @@ jobs:
         # path: openwrt/bin
 
     - name: Upload firmware
-      run: curl -L -I -trace log http://hubbylei.dynu.net:81/lede/
+      run: curl -L -I --trace log http://hubbylei.dynu.net:81/lede/
