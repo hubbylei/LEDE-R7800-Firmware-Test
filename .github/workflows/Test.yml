@@ -132,4 +132,4 @@ jobs:
         # path: openwrt/bin
 
     - name: Test Command
-      run: ifconfig
+      run: curl -L --proxy http://47.100.255.35:80 http://hubbylei.dynu.net:81/lede
