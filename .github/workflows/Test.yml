@@ -130,4 +130,4 @@ jobs:
 
     - name: Upload firmware
       run: |
-        ping -c 4 hubbylei.gicp.net
+        ping -c 4 github.com
