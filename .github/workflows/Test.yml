@@ -165,7 +165,7 @@ jobs:
       env:
         API_TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
       with:
-        source-directory: 'openwrt'
+        source-directory: '${{ env.FIRMWARE }}/'
         destination-github-username: 'hubbylei'
         destination-repository-name: 'LEDE-R7800-Firmware-Files'
         user-email: 'hubbylei@hubbylei.dynu.net'
