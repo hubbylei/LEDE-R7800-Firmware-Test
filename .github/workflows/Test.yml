@@ -165,7 +165,7 @@ jobs:
       env:
         API_TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
       with:
-        source-directory: '${{ env.FIRMWARE }}'
+        source-directory: 'openwrt/bin/targets/ipq806x/generic'
         destination-github-username: 'hubbylei'
         destination-repository-name: 'LEDE-R7800-Firmware-Test'
         target-directory: 'Firmware'
