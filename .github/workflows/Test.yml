@@ -29,7 +29,7 @@ env:
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: false
+  UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
@@ -121,10 +121,10 @@ jobs:
         dd if=/dev/zero bs=1M count=1 of=bin/targets/ipq806x/generic/config.buildinfo
         dd if=/dev/zero bs=1M count=1 of=bin/targets/ipq806x/generic/feeds.buildinfo
         dd if=/dev/zero bs=1M count=1 of=bin/targets/ipq806x/generic/version.buildinfo
-        echo "::set-output name=status::success"
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M%S")" >> $GITHUB_ENV
+        echo "::set-output name=status::success"
 
     - name: Check space usage
       if: (!cancelled())
