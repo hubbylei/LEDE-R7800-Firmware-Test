@@ -158,7 +158,7 @@ jobs:
       run: |
         ls ${{ env.FIRMWARE }}
         echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M%S")"
-        echo "::set-output name=release_out::$(echo ${{ env.FIRMWARE }} | sed "s,${{ env.WORKSPACE }}/,g")"
+        echo "::set-output name=release_out::$(echo ${{ env.FIRMWARE }} | sed "s,${{ env.WORKSPACE }}/,,g")"
         echo "::set-output name=status::success"
 
     - name: Upload File To Repo
