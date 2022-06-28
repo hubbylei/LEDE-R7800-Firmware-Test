@@ -23,7 +23,7 @@ on:
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
+  REPO_BRANCH: main
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: r7800.config
   DIY_P1_SH: diy-part1.sh
@@ -57,8 +57,8 @@ jobs:
         sudo chown $USER:$GROUPS /workdir
 
     - name: Clone source code
+      working-directory: /workdir
       run: |
-        cd /workdir
         echo $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
@@ -165,7 +165,7 @@ jobs:
       env:
         API_TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
       with:
-        source-directory: '${{ env.FIRMWARE }}'
+        source-directory: '$(echo ${{ env.FIRMWARE }} | sed "s,${GITHUB_WORKSPACE}/,g")'
         destination-github-username: 'hubbylei'
         destination-repository-name: 'LEDE-R7800-Firmware-Test'
         user-email: 'hubbylei@hubbylei.dynu.net'
