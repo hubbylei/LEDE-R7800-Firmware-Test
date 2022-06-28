@@ -157,6 +157,7 @@ jobs:
       run: |
         ls ${{ env.FIRMWARE }}
         echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M%S")"
+        echo "::set-output name=release_out::$(echo ${{ env.FIRMWARE }} | sed "s,${GITHUB_WORKSPACE}/,g")"
         echo "::set-output name=status::success"
 
     - name: Upload File To Repo
@@ -165,7 +166,7 @@ jobs:
       env:
         API_TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
       with:
-        source-directory: '$(echo ${{ env.FIRMWARE }} | sed "s,${GITHUB_WORKSPACE}/,g")'
+        source-directory: '${{ steps.tag.outputs.release_out }}'
         destination-github-username: 'hubbylei'
         destination-repository-name: 'LEDE-R7800-Firmware-Test'
         user-email: 'hubbylei@hubbylei.dynu.net'
