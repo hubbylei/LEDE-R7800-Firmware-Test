@@ -167,10 +167,10 @@ jobs:
       with:
         source-directory: '${{ env.FIRMWARE }}'
         destination-github-username: 'hubbylei'
-        destination-repository-name: 'LEDE-R7800-Firmware-Files'
+        destination-repository-name: 'LEDE-R7800-Firmware-Test'
         user-email: 'hubbylei@hubbylei.dynu.net'
         commit-message: ${{ steps.tag.outputs.release_tag }}
-        target-branch: main
+        target-branch: firmware
 
     - name: Upload firmware to release
       uses: softprops/action-gh-release@v1
